@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!DOCTYPE orm SYSTEM "file:/javax/jdo/orm.dtd">
+<orm>
+	<package name="org.gardey">
+		<class name="ApplicationManager">
+		 	<field name="oid" value-strategy="identity" />
+			<field name="users"/>
+		</class>
+		<class name="DomElement">
+				<field name="oid" value-strategy="identity" />
+		</class>
+		<class name="User">
+			<field name="oid" value-strategy="identity" />
+		</class>
+	</package>
+
+	<package name="org.gardey.events">
+		<class name="UsabilityEvent">
+			<field name="oid" value-strategy="identity" />
+		</class>
+		<class name="Navigation" embedded-only="true">
+			<field name="anchor" />
+			<field name="url" />
+		</class>
+		<class name="NavigationPath">
+    		<field name="navigations" persistence-modifier="persistent">
+                <collection element-type="org.gardey.events.Navigation"/>
+                <element>
+                    <embedded>
+                        <field name="url">
+                            <column name="url" allows-null="true"/>
+                        </field>
+                        <field name="anchor" allows-null="true"/>
+                    </embedded>
+                </element>
+            </field>
+        </class>
+	</package>
+
+	<package name="org.gardey.smells">
+		<class name="UsabilitySmell">
+			<field name="oid" value-strategy="identity" />
+		</class>
+		<class name="UnformattedInput">
+    		<field name="expressions" persistence-modifier="persistent">
+                <collection element-type="org.gardey.smells.Expression"/>
+                <join>
+                    <column name="SMELL_ID"/>
+                </join>
+                <element>
+                    <embedded>
+                        <field name="name">
+                            <column name="name" allows-null="true"/>
+                        </field>
+                        <field name="regex">
+                            <column name="regex" allows-null="true"/>
+                        </field>
+                        <field name="threats"/>
+                    </embedded>
+                </element>
+            </field>
+        </class>
+        <class name="Expression" embedded-only="true">
+            <field name="name">
+            	<column name="name" allows-null="true"/>
+            </field>
+            <field name="regex">
+                <column name="regex" allows-null="true"/>
+            </field>
+           	<field name="threats"/>
+        </class>
+	</package>
+</orm>

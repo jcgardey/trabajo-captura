@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+    "http://www.springframework.org/dtd/spring-beans.dtd"> -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+       
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    	<property name="locations" value="classpath:database.properties"/>
+	</bean>
+	
+	
+		<bean id="transactionInterceptor" class="org.gardey.utils.TransactionInterceptor"/>
+	   	<bean id="timerInterceptor" class="org.gardey.utils.TimerInterceptor"/>
+	   	
+	   	<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+	    	<property name="beanNames"><value>*Repository</value></property>
+		    <property name="interceptorNames">
+		        <list>
+		        	<value>timerInterceptor</value>
+		            <value>transactionInterceptor</value>
+		        </list>
+		    </property>
+		</bean>
+		
+		
+	<!-- Mongo -->
+		<bean id="mongo"
+        class="org.springframework.orm.jdo.LocalPersistenceManagerFactoryBean"> 
+	        <property name="jdoProperties">
+	            <props>
+	                <prop key="javax.jdo.PersistenceManagerFactoryClass">
+	                    ${javax.jdo.PersistenceManagerFactoryClass}</prop>
+	                <prop key="javax.jdo.option.ConnectionURL">${mongo.ConnectionURL}</prop>
+	                <prop key="datanucleus.metadata.supportORM">true</prop>
+	                <prop key="datanucleus.schema.autoCreateAll">${datanucleus.schema.autoCreateAll}</prop>
+	               	<prop key="datanucleus.autoStartClassNames">${datanucleus.autoStartClassNames}</prop> 
+	 				<prop key="datanucleus.autoStartMechanism">${datanucleus.autoStartMechanism}</prop> 
+	 				<prop key="javax.jdo.option.Mapping">mongo</prop>
+	            </props>
+	        </property>
+	    </bean>
+	    
+	    <bean id="mongoManager" factory-bean="mongo" factory-method="getPersistenceManager"/>
+	    
+	    <bean id="mongoAbstractRepository" class="org.gardey.repositories.AbstractRepository">
+    	<property name="persistenceManager">
+    		<ref bean="mongoManager"/>
+    	</property>
+	    </bean>
+	    <bean id="mongoUsabilitySmellRepository" class="org.gardey.repositories.UsabilitySmellRepository" parent="mongoAbstractRepository"/>	
+	    <bean id="mongoApplicationManagerRepository" class="org.gardey.repositories.ApplicationManagerRepository" parent="mongoAbstractRepository"/>
+	    <bean id="mongoUserRepository" class="org.gardey.repositories.UserRepository" parent="mongoAbstractRepository"/>	
+	   	<bean id="mongoUsabilityEventRepository" class="org.gardey.repositories.UsabilityEventRepository" parent="mongoAbstractRepository"/>
+	   	
+	   	<bean id="mongoRepositoryLocator" class="org.gardey.repositories.RepositoryLocator">
+	   		<property name="applicationManagerRepository">
+	   			<ref bean="mongoApplicationManagerRepository"/>
+	   		</property>
+	   		<property name="usabilitySmellRepository">
+	   			<ref bean="mongoUsabilitySmellRepository"/>
+	   		</property>
+	   		<property name="userRepository">
+	   			<ref bean="mongoUserRepository"/>
+	   		</property>
+	   		<property name="usabilityEventRepository">
+	   			<ref bean="mongoUsabilityEventRepository"/>
+	   		</property>
+	   	</bean> 	
+    
+    
+    <!-- MYSQL  -->
+    
+    
+    	<bean id="mysql"
+        class="org.springframework.orm.jdo.LocalPersistenceManagerFactoryBean"> 
+	        <property name="jdoProperties"> 
+	        	<props> 
+	                <prop key="javax.jdo.PersistenceManagerFactoryClass">
+	                    ${javax.jdo.PersistenceManagerFactoryClass}</prop>
+	                <prop key="javax.jdo.option.ConnectionURL">${mysql.ConnectionURL}</prop>
+	                <prop key="javax.jdo.option.ConnectionUserName">${mysql.ConnectionUserName}</prop>
+	    			<prop key="javax.jdo.option.ConnectionPassword">${mysql.ConnectionPassword}</prop>
+	                <prop key="datanucleus.schema.autoCreateAll">${datanucleus.schema.autoCreateAll}</prop>
+	                <prop key="datanucleus.autoStartClassNames">${datanucleus.autoStartClassNames}</prop>
+	 				<prop key="datanucleus.autoStartMechanism">${datanucleus.autoStartMechanism}</prop> 
+	 				<prop key="javax.jdo.option.Mapping">mysql</prop>
+	 				<prop key="datanucleus.attachSameDatastore">false</prop>
+	            </props> 
+		       </property> 
+	    </bean>
+    
+    
+	    <bean id="mysqlManager" factory-bean="mysql" factory-method="getPersistenceManager"/>   
+	    <bean id="mysqlAbstractRepository" class="org.gardey.repositories.AbstractRepository">
+    	<property name="persistenceManager">
+    		<ref bean="mysqlManager"/>
+    	</property>
+	    </bean>
+	    <bean id="mysqlApplicationManagerRepository" class="org.gardey.repositories.ApplicationManagerRepository" parent="mysqlAbstractRepository"/>
+	    <bean id="mysqlUsabilitySmellRepository" class="org.gardey.repositories.UsabilitySmellRepository" parent="mysqlAbstractRepository"/>
+	    <bean id="mysqlUserRepository" class="org.gardey.repositories.UserRepository" parent="mysqlAbstractRepository"/>	
+	   	<bean id="mysqlUsabilityEventRepository" class="org.gardey.repositories.UsabilityEventRepository" parent="mysqlAbstractRepository"/>
+	   	
+	   	<bean id="mysqlRepositoryLocator" class="org.gardey.repositories.RepositoryLocator">
+	   		<property name="applicationManagerRepository">
+	   			<ref bean="mysqlApplicationManagerRepository"/>
+	   		</property>
+	   		<property name="usabilitySmellRepository">
+	   			<ref bean="mysqlUsabilitySmellRepository"/>
+	   		</property>
+	   		<property name="userRepository">
+	   			<ref bean="mysqlUserRepository"/>
+	   		</property>
+	   		<property name="usabilityEventRepository">
+	   			<ref bean="mysqlUsabilityEventRepository"/>
+	   		</property>
+	   	</bean> 
+
+    
+    <!-- CASSANDRA -->
+    	<bean id="cassandra"
+        class="org.springframework.orm.jdo.LocalPersistenceManagerFactoryBean"> 
+	        <property name="jdoProperties">
+	            <props>
+	                <prop key="javax.jdo.PersistenceManagerFactoryClass">${javax.jdo.PersistenceManagerFactoryClass}</prop>
+	                <prop key="javax.jdo.option.ConnectionURL">${cassandra.ConnectionURL}</prop>
+	                <prop key="datanucleus.mapping.Schema">${cassandra.schema}</prop>
+	                <prop key="datanucleus.schema.autoCreateAll">${datanucleus.schema.autoCreateAll}</prop>
+	                <prop key="datanucleus.autoStartClassNames">${datanucleus.autoStartClassNames}</prop>
+	 				<prop key="datanucleus.autoStartMechanism">${datanucleus.autoStartMechanism}</prop> 
+	 				<prop key="javax.jdo.option.Mapping">cassandra</prop>
+	            </props>
+	        </property>
+    	</bean>
+	    <bean id="cassandraManager" factory-bean="cassandra" factory-method="getPersistenceManager"/> 
+	    <bean id="cassandraAbstractRepository" class="org.gardey.repositories.AbstractRepository">
+    	<property name="persistenceManager">
+    		<ref bean="cassandraManager"/>
+    	</property>
+	    </bean>
+	    <bean id="cassandraApplicationManagerRepository" class="org.gardey.repositories.ApplicationManagerRepository" parent="cassandraAbstractRepository"/>
+	    <bean id="cassandraUsabilitySmellRepository" class="org.gardey.repositories.UsabilitySmellRepository" parent="cassandraAbstractRepository"/>
+	    <bean id="cassandraUserRepository" class="org.gardey.repositories.UserRepository" parent="cassandraAbstractRepository"/>	
+	   	<bean id="cassandraUsabilityEventRepository" class="org.gardey.repositories.UsabilityEventRepository" parent="cassandraAbstractRepository"/>
+	   	
+	   	<bean id="cassandraRepositoryLocator" class="org.gardey.repositories.RepositoryLocator">
+	   		
+	   		<property name="applicationManagerRepository">
+	   			<ref bean="cassandraApplicationManagerRepository"/>
+	   		</property>
+	   		<property name="usabilitySmellRepository">
+	   			<ref bean="cassandraUsabilitySmellRepository"/>
+	   		</property>
+	   		<property name="userRepository">
+	   			<ref bean="cassandraUserRepository"/>
+	   		</property>
+	   		<property name="usabilityEventRepository">
+	   			<ref bean="cassandraUsabilityEventRepository"/>
+	   		</property>
+	   	</bean>  
+   
+    	<bean id="neo4j"
+        class="org.springframework.orm.jdo.LocalPersistenceManagerFactoryBean"> 
+        <property name="jdoProperties">
+            <props>
+                <prop key="javax.jdo.PersistenceManagerFactoryClass">
+                    ${javax.jdo.PersistenceManagerFactoryClass}</prop>
+                <prop key="javax.jdo.option.ConnectionURL">${neo4j.ConnectionURL}</prop>
+                <prop key="datanucleus.metadata.supportORM">true</prop>
+                <prop key="datanucleus.schema.autoCreateAll">${datanucleus.schema.autoCreateAll}</prop>
+               	<prop key="datanucleus.autoStartClassNames">${datanucleus.autoStartClassNames}</prop> 
+ 				<prop key="datanucleus.autoStartMechanism">${datanucleus.autoStartMechanism}</prop> 
+ 				<prop key="datanucleus.attachSameDatastore">false</prop>
+ 				<prop key="javax.jdo.option.Mapping">neo4j</prop>
+            </props>
+        </property>
+		</bean>
+		    
+		 <bean id="neo4jManager" factory-bean="neo4j" factory-method="getPersistenceManager"/> 
+		 <bean id="neo4jAbstractRepository" class="org.gardey.repositories.AbstractRepository">
+    	<property name="persistenceManager">
+    		<ref bean="neo4jManager"/>
+    	</property>
+	    </bean>    
+	    <bean id="neo4jApplicationManagerRepository" class="org.gardey.repositories.ApplicationManagerRepository" parent="neo4jAbstractRepository"/>
+	    <bean id="neo4jUsabilitySmellRepository" class="org.gardey.repositories.UsabilitySmellRepository" parent="neo4jAbstractRepository"/>
+	    <bean id="neo4jUserRepository" class="org.gardey.repositories.UserRepository" parent="neo4jAbstractRepository"/>	
+	   	<bean id="neo4jUsabilityEventRepository" class="org.gardey.repositories.UsabilityEventRepository" parent="neo4jAbstractRepository"/> 
+	   	
+	   	<bean id="neo4jRepositoryLocator" class="org.gardey.repositories.RepositoryLocator">
+	   		
+	   		<property name="applicationManagerRepository">
+	   			<ref bean="neo4jApplicationManagerRepository"/>
+	   		</property>
+	   		<property name="usabilitySmellRepository">
+	   			<ref bean="neo4jUsabilitySmellRepository"/>
+	   		</property>
+	   		<property name="userRepository">
+	   			<ref bean="neo4jUserRepository"/>
+	   		</property>
+	   		<property name="usabilityEventRepository">
+	   			<ref bean="neo4jUsabilityEventRepository"/>
+	   		</property>
+	   	</bean> 
+	   	
+	   	<bean id="mongoDatstore" class="org.gardey.utils.DatastoreName" factory-method="valueOf">
+	   		<constructor-arg>
+	   			<value>MONGODB</value>
+	   		</constructor-arg>
+	   	</bean>
+	   	<bean id="mysqlDatstore" class="org.gardey.utils.DatastoreName" factory-method="valueOf">
+	   		<constructor-arg>
+	   			<value>MySQL</value>
+	   		</constructor-arg>
+	   	</bean>
+	   	<bean id="cassandraDatstore" class="org.gardey.utils.DatastoreName" factory-method="valueOf">
+	   		<constructor-arg>
+	   			<value>CASSANDRA</value>
+	   		</constructor-arg>
+	   	</bean>
+	   	<bean id="neo4jDatstore" class="org.gardey.utils.DatastoreName" factory-method="valueOf">
+	   		<constructor-arg>
+	   			<value>NEO4J</value>
+	   		</constructor-arg>
+	   	</bean>
+	   	
+	   	
+	   	<bean id="datastores" class="org.gardey.utils.Datastores" factory-method="getInstance">
+	   		<property name="repositoryLocators">
+		   		<map>
+		   			<entry key="MONGODB" value-ref="mongoRepositoryLocator"></entry>
+		   			<entry key="MySQL" value-ref="mysqlRepositoryLocator"></entry>
+		   			<entry key="CASSANDRA" value-ref="cassandraRepositoryLocator"></entry>
+		   			<entry key="NEO4J" value-ref="neo4jRepositoryLocator"></entry>
+		   		</map>
+	   		</property>
+	   	</bean>
+    
+   	<!-- XML  
+   	
+   	<bean id="xml"
+        class="org.springframework.orm.jdo.LocalPersistenceManagerFactoryBean"> 
+        <property name="jdoProperties">
+            <props>
+                <prop key="javax.jdo.PersistenceManagerFactoryClass">
+                    ${javax.jdo.PersistenceManagerFactoryClass}</prop>
+                <prop key="javax.jdo.option.ConnectionURL">${xml.ConnectionURL}</prop>
+                <prop key="datanucleus.metadata.supportORM">true</prop>
+                <prop key="datanucleus.schema.autoCreateAll">${datanucleus.schema.autoCreateAll}</prop>
+               	<prop key="datanucleus.autoStartClassNames">${datanucleus.autoStartClassNames}</prop> 
+ 				<prop key="datanucleus.autoStartMechanism">${datanucleus.autoStartMechanism}</prop> 
+ 				<prop key="javax.jdo.option.Mapping">xml</prop>
+ 				<prop key="datanucleus.attachSameDatastore">false</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="xmlManager" factory-bean="xml" factory-method="getPersistenceManager"/> 
+    <bean id="xmlAbstractRepository" class="org.gardey.repositories.AbstractRepository">
+    	<property name="persistenceManager">
+    		<ref bean="xmlManager"/>
+    	</property>
+    </bean> -->
+    
+</beans>

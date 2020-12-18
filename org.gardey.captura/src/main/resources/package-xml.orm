@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE orm SYSTEM "file:/javax/jdo/orm.dtd">
+<orm>
+	<package name="org.gardey.smells">
+		<class name="UsabilitySmell" schema="/captura/UsabilitySmells">
+			<field name="oid" primary-key="true" value-strategy="uuid-hex"/>
+			<field name="events" persistence-modifier="persistent"/>
+		</class>
+		<class name="Expression" schema="/captura/Expressions">
+			<field name="oid" primary-key="true" value-strategy="uuid-hex"/>
+		</class>
+		<class name="FreeInput" schema="/captura/FreeInput"/>
+		<class name="NoProcessingPage" schema="/captura/NoProcessingPage"/>
+		<class name="OverlookedContent" schema="/captura/OverlookedContent"/>
+		<class name="UnformattedInput" schema="/captura/UnformattedInput"/>
+		<class name="UnmatchedInputSize" schema="/captura/UnmatchedInputSize"/>
+	</package>
+
+	<package name="org.gardey.events">
+		<class name="UsabilityEvent" schema="/captura/UsabilityEvents">
+			<field name="oid" primary-key="true" value-strategy="uuid-hex"/>
+		</class>
+		<class name="Navigation" schema="/captura/Navigations">
+			<field name="oid" primary-key="true" value-strategy="uuid-hex"/>
+		</class>
+		<class name="BulkAction" schema="/captura/BulkAction"/>
+		<class name="FlashNavigation" schema="/captura/FlashNavigation"/>
+		<class name="FlashScrolling" schema="/captura/FlashScrolling"/>
+		<class name="FormSubmission" schema="/captura/FormSubmission"/>
+		<class name="LongRequest" schema="/captura/LongRequest"/>
+		<class name="NavigationPath" schema="/captura/NavigationPath"/>
+		<class name="OptionSelection" schema="/captura/OptionSelection"/>
+		<class name="RadioButtonSelection" schema="/captura/RadioButtonSelection"/>
+		<class name="Search" schema="/captura/Search"/>
+		<class name="SelectOptionSelection" schema="/captura/SelectOptionSelection"/>
+		<class name="TextInput" schema="/captura/TextInput"/>
+		<class name="TooltipAttempt" schema="/captura/TooltipAttempt"/>
+		<class name="UnfilledForm" schema="/captura/UnfilledForm"/>
+		<class name="ZoomOnElement" schema="/captura/ZoomOnElement"/>
+	</package>
+
+	<package name="org.gardey">
+		<class name="ApplicationManager" schema="/captura/ApplicationManager">
+			<field name="oid" primary-key="true" value-strategy="uuid-hex"/>
+			<field name="users"/>
+		</class>
+		<class name="DomElement" schema="/captura/DomElements">
+			<field name="oid" primary-key="true" value-strategy="uuid-hex"/>
+		</class>
+		<class name="User" schema="/captura/Users">
+			<field name="oid" primary-key="true" value-strategy="uuid-hex"/>
+		</class>
+	</package>
+</orm>

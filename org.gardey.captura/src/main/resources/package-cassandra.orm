@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE orm SYSTEM "file:/javax/jdo/orm.dtd">
+<orm>
+<package name="org.gardey.smells">
+	<class name="UsabilitySmell">
+	    <field name="oid" primary-key="true" value-strategy="native">
+				<column name="USABILITYSMELL_ID"/>
+		</field> 
+	</class>	
+	<class name="Expression">
+		<field name="oid" value-strategy="native">
+			<column name="EXPRESSION_ID"/>
+		</field>	
+	</class>
+</package>
+
+<package name="org.gardey.events">
+	<class name="UsabilityEvent">
+	  	<field name="oid" primary-key="true" value-strategy="native">
+			<column name="USABILITYEVENT_ID"/>
+		</field>
+	  <field name="badsmells" mapped-by="events">
+        <collection element-type="org.gardey.smells.UsabilitySmell"/>
+      </field>
+	</class>
+
+	<class name="Navigation">
+		<field name="oid" primary-key="true" value-strategy="native">
+			<column name="NAVIGATION_ID"/>
+		</field>
+	</class>
+</package>
+<package name="org.gardey">
+	<class name="ApplicationManager">
+		<field name="oid" primary-key="true" value-strategy="native">
+			<column name="APPLICATIONMANAGER_ID"/>
+		</field>
+	</class>
+	<class name="User">
+			<field name="oid" primary-key="true" value-strategy="native">
+				<column name="USER_ID"/>
+			</field>
+			<field name="badsmells" mapped-by="user">
+        		<collection element-type="org.gardey.smells.UsabilitySmell"/>
+				<element column="USABILITYSMELL_ID"/>
+      		</field>
+	</class>
+	<class name="DomElement">
+		<field name="oid" primary-key="true" value-strategy="native">
+			<column name="DOMELEMENT_ID"/>
+		</field>
+	</class>
+</package>
+
+</orm>

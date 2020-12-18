@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<!DOCTYPE orm SYSTEM "file:/javax/jdo/orm.dtd">
+<orm>
+<package name="org.gardey.smells">
+	<class name="UsabilitySmell">
+	    <field name="oid" primary-key="true" value-strategy="native"/>
+	    <field name="events">
+      	<collection element-type="org.gardey.events.UsabilityEvent"/>
+      </field>
+      <field name="user"/>
+      <field name="domElement">
+			<column name="DOMELEMENT_ID"/>
+		</field>
+	</class>
+
+	<class name="FreeInput">
+		<field name="valuesWithOccurrences" converter="org.gardey.utils.MapStringIntegerToStringConverter" />
+	</class>
+
+	<class name="UnformattedInput">
+		<field name="expressions">
+			<collection element-type="org.gardey.smells.Expression"/>
+		</field>
+	</class>
+
+	<class name="Expression">
+		<field name="oid" value-strategy="native">
+			<column name="EXPRESSION_ID"/>
+		</field>
+		<field name="name">
+			<column name="EXPRESSION_NAME" allows-null="true"/>
+		</field>
+		<field name="regex">
+			<column name="EXPRESSION_REGEX" allows-null="true"/>
+		</field>
+		<field name="threats">
+			<collection element-type="org.gardey.events.UsabilityEvent"/>
+		</field>
+	</class>
+</package>
+
+<package name="org.gardey.events">
+	<class name="UsabilityEvent">
+	  <field name="oid" primary-key="true" value-strategy="native">
+		<column name="USABILITYEVENT_ID"/>
+		</field>
+	  <field name="badsmells">
+        <collection element-type="org.gardey.smells.UsabilitySmell"/>
+    </field>
+	<field name="timestamp" converter="org.gardey.utils.DateLongConverter"/>
+    <field name="domElement">
+      	<column name="DOMELEMENT_ID"/>
+    </field>
+	</class>
+
+	<class name="NavigationPath">
+		<field name="navigations">
+			<collection element-type="org.gardey.events.Navigation"/>
+		</field>
+	</class>
+
+	<class name="Navigation">
+		<field name="oid" primary-key="true" value-strategy="native">
+			<column name="NAVIGATION_ID"/>
+		</field>
+	</class>
+</package>
+
+<package name="org.gardey">
+	<class name="ApplicationManager">
+		<field name="oid" primary-key="true" value-strategy="native">
+			<column name="APPLICATIONMANAGER_ID"/>
+		</field>
+		<field name="users">
+          <collection element-type="org.gardey.User"/>
+    </field>
+	</class>
+	<class name="User">
+			<field name="oid" primary-key="true" value-strategy="native">
+				<column name="USER_ID"/>
+			</field>
+			<field name="badsmells">
+        	<collection element-type="org.gardey.smells.UsabilitySmell"/>
+      </field>
+	</class>
+	<class name="DomElement">
+		<field name="oid" primary-key="true" value-strategy="native">
+			<column name="DOMELEMENT_ID"/>
+		</field>
+		<field name="html"/>
+	</class>
+</package>
+
+</orm>
