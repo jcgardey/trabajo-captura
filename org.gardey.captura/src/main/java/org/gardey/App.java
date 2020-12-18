@@ -84,7 +84,7 @@ public class App
     	
     	Logger.getLogger(App.class).info("");
     	Logger.getLogger(App.class).info("<-- Navegaciones de los usuarios cuyo path pasa por una URL específica -->");
-    	System.out.println(applicationManager.getNavigationPathsIncludingUrl("https://laplataviaja.com/paquetes.php").size());
+    	applicationManager.getNavigationPathsIncludingUrl("https://laplataviaja.com/paquetes.php").size();
     	
     	
     	Logger.getLogger(App.class).info("");
