@@ -1,5 +1,4 @@
-results.log
-native-queries.log
+*.log
 org.gardey.captura/.settings
 org.gardey.captura/bin
 org.gardey.captura/target
