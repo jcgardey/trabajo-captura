@@ -29,7 +29,7 @@ public class Timer {
 	public long stop() {
 		this.watch.stop();
 		long currentTime = this.watch.getTime();
-		Logger.getLogger(App.class).info("QUERY TOTAL TIME ELAPSED: " + currentTime + " ms");
+		Logger.getLogger(System.getProperty("targetDatastore")).info("QUERY TOTAL TIME ELAPSED: " + currentTime + " ms");
 		this.watch.reset();
 		return currentTime;
 	}

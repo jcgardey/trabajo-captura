@@ -48,53 +48,51 @@ public class App
     }
 
     public void runQueriesInDatastore (DatastoreName targetDastore) {
-    	Logger.getLogger(App.class).info("");	
-    	Logger.getLogger(App.class).info("");	
-    	Logger.getLogger(App.class).info("Runing queries in " + targetDastore.toString());
+    	Logger.getLogger(targetDastore.toString()).info("");	
+    	Logger.getLogger(targetDastore.toString()).info("");	
+    	Logger.getLogger(targetDastore.toString()).info("Runing queries in " + targetDastore.toString());
     	
     	RepositoryLocator.setDefaultRepositoryLocator(Datastores.getInstance().getRepositoryLocatorForDatastore(targetDastore));
     	
     	ApplicationManager applicationManager = RepositoryLocator.getInstance().getApplicationManagerRepository().getApplicationManager();
     	
-    	Logger.getLogger(App.class).info("Database stats");
-    	Logger.getLogger(App.class).info("Users: " + applicationManager.getUsersCount());
-    	Logger.getLogger(App.class).info("Usability Smells: " + applicationManager.getUsabilitySmellsCount());
-    	Logger.getLogger(App.class).info("Usability Events: " + applicationManager.getUsabilityEventsCount());
-    	
-   	 		
-    	Logger.getLogger(App.class).info("");	
-    	Logger.getLogger(App.class).info("<-- Buscar usuario a partir de su username -->");
+    	Logger.getLogger(targetDastore.toString()).info("Database stats");
+    	Logger.getLogger(targetDastore.toString()).info("Users: " + applicationManager.getUsersCount());
+    	Logger.getLogger(targetDastore.toString()).info("Usability Smells: " + applicationManager.getUsabilitySmellsCount());
+    	Logger.getLogger(targetDastore.toString()).info("Usability Events: " + applicationManager.getUsabilityEventsCount());
+    		
+    	Logger.getLogger(targetDastore.toString()).info("");	
+    	Logger.getLogger(targetDastore.toString()).info("<-- Buscar usuario a partir de su username -->");
     	User aUser = applicationManager.findUserByUsername("test");
     	
-    	Logger.getLogger(App.class).info("");
-    	Logger.getLogger(App.class).info("<-- Recuperar un smell a partir de la url y el xpath su objeto DOM involucrado  -->");
-    	UsabilitySmell aSmell = applicationManager.getUsabilitySmellByTargetHtml("<a href=\"/agency_sales/108517\"> <span class=\"label label-primary label-pnr\">UYSUKS</span></a>");
+    	Logger.getLogger(targetDastore.toString()).info("");
+    	Logger.getLogger(targetDastore.toString()).info("<-- Recuperar un smell a partir de la url y el xpath su objeto DOM involucrado  -->");
+		UsabilitySmell aSmell = applicationManager.getUsabilitySmellByTargetHtml("<a href=\"/agency_sales/108517\"> <span class=\"label label-primary label-pnr\">UYSUKS</span></a>");
+		
+    	Logger.getLogger(targetDastore.toString()).info("");
+    	Logger.getLogger(targetDastore.toString()).info("<-- Usability Events asociados a un usability smell ordenados por fecha de ocurrencia de manera descendente  -->");
+		Logger.getLogger(targetDastore.toString()).info("Result Size: " + aSmell.getUsabilityEventsOrderedByTimestamp().size());
     	
-    	Logger.getLogger(App.class).info("");
-    	Logger.getLogger(App.class).info("<-- Usability Events asociados a un usability smell ordenados por fecha de ocurrencia de manera descendente  -->");
-    	aSmell.getUsabilityEventsOrderedByTimestamp();
+     	Logger.getLogger(targetDastore.toString()).info("");
+    	Logger.getLogger(targetDastore.toString()).info("<-- Usability Smells de un usuario detectados en una URL específica -->");
+    	Logger.getLogger(targetDastore.toString()).info("Result Size: " + aUser.getUsabilitySmellsDetectedInPage("http://clientes.belugas.com.ar/testsite/register.php").size());
     	
-     	Logger.getLogger(App.class).info("");
-    	Logger.getLogger(App.class).info("<-- Usability Smells de un usuario detectados en una URL específica -->");
-    	aUser.getUsabilitySmellsDetectedInPage("http://clientes.belugas.com.ar/testsite/register.php");
+    	Logger.getLogger(targetDastore.toString()).info("");
+    	Logger.getLogger(targetDastore.toString()).info("<-- Usability Events detectados en un fragmento de código HTML -->");
+		Logger.getLogger(targetDastore.toString()).info("Result Size: " + applicationManager.getUsabilityEventsInHtml("<input type=\"text\" class=\"form-control input-sm\" id=\"pnr_code\" name=\"pnr_code\" />").size());
+
     	
-    	Logger.getLogger(App.class).info("");
-    	Logger.getLogger(App.class).info("<-- Usability Events detectados en un fragmento de código HTML -->");
-    	applicationManager.getUsabilityEventsInHtml("<input type=\"text\" class=\"form-control input-sm\" id=\"pnr_code\" name=\"pnr_code\" />");
+    	Logger.getLogger(targetDastore.toString()).info("");
+    	Logger.getLogger(targetDastore.toString()).info("<-- Navegaciones de los usuarios cuyo path pasa por una URL específica -->");
+    	Logger.getLogger(targetDastore.toString()).info("Result Size: " + applicationManager.getNavigationPathsIncludingUrl("https://laplataviaja.com/paquetes.php").size());
     	
-    	Logger.getLogger(App.class).info("");
-    	Logger.getLogger(App.class).info("<-- Navegaciones de los usuarios cuyo path pasa por una URL específica -->");
-    	applicationManager.getNavigationPathsIncludingUrl("https://laplataviaja.com/paquetes.php").size();
-    	
-    	
-    	Logger.getLogger(App.class).info("");
-    	Logger.getLogger(App.class).info("<-- Cantidad de Usability Event de cada tipo -->");
+    	Logger.getLogger(targetDastore.toString()).info("");
+    	Logger.getLogger(targetDastore.toString()).info("<-- Cantidad de Usability Event de cada tipo -->");
     	applicationManager.getEventsQtyByType();	
     	
-    	Logger.getLogger(App.class).info("");
-    	Logger.getLogger(App.class).info("<-- Usability Smells UndescriptiveElement cuyo tiempo de espera promedio es superior al promedio general -->");
-    	applicationManager.getUndescriptiveElementsWithHighWaitingTime();
-    	
+    	Logger.getLogger(targetDastore.toString()).info("");
+    	Logger.getLogger(targetDastore.toString()).info("<-- Usability Smells UndescriptiveElement cuyo tiempo de espera promedio es superior al promedio general -->");
+		Logger.getLogger(targetDastore.toString()).info("Result Size: " + applicationManager.getUndescriptiveElementsWithHighWaitingTime().size());	
     }
 
     public void migrate (DatastoreName source, DatastoreName destination) {
@@ -117,14 +115,14 @@ public class App
 			RepositoryLocator.getInstance().getUsabilityEventRepository().duplicateNavigations(anotherUser);
 			RepositoryLocator.getInstance().getUsabilityEventRepository().duplicateNavigations(testUser);
 		}
-		System.out.println("duplicating smells");
+		
 		for (int i = 0; i < 5; i++) {
 			RepositoryLocator.getInstance().getUsabilitySmellRepository().duplicateSmellsForUser(aUser);
 			RepositoryLocator.getInstance().getUsabilitySmellRepository().duplicateSmellsForUser(anotherUser);		
 			RepositoryLocator.getInstance().getUsabilitySmellRepository().duplicateSmellsForUser(aUser);
 			
 		}
-		System.out.println("duplicating events");
+		
 		for (int i = 0; i < 4; i++) {
 			RepositoryLocator.getInstance().getUsabilityEventRepository().duplicateUsabilityEvents(anotherUser);
 			RepositoryLocator.getInstance().getUsabilityEventRepository().duplicateUsabilityEvents(testUser);
