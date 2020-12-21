@@ -17,24 +17,15 @@ RUN wget http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/ap
   mv apache-maven-$MAVEN_VERSION /usr/lib/mvn
 
 
-# Mongo
-RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.6/main' >> /etc/apk/repositories
-RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.6/community' >> /etc/apk/repositories
-#RUN apk add mongodb=3.4.4-r0
-#RUN apk add mongodb-tools
-
 RUN /bin/sh -c "apk add --no-cache bash"
 
-#RUN mongo --version
-
-ENV user captura
-
 # Create a group and user
+ENV user captura
 RUN addgroup -S ${user} && adduser -S ${user} -G ${user} -h /home/${user} \
 && chown -R ${user} /home/${user}
-
 RUN apk update
 RUN apk add sudo
 RUN echo "captura ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
+USER ${user}
 WORKDIR /var/captura/org.gardey.captura

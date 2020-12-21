@@ -2,6 +2,6 @@
 org.gardey.captura/.settings
 org.gardey.captura/bin
 org.gardey.captura/target
-org.gardey.captura/neo4j-captura
+org.gardey.captura/neo4j
 org.gardey.captura/core
 org.gardey.captura/.project

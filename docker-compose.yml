@@ -5,7 +5,7 @@ services:
     environment: 
       MONGO_INITDB_DATABASE: captura
     volumes:
-      - /var/captura/db:/data/db
+      - ./container-databases/mongo:/data/db
       - ./database:/var/captura
     ports:
       - "27017:27017"
@@ -21,7 +21,7 @@ services:
       MYSQL_PASSWORD: captura
       MYSQL_DATABASE: captura
     volumes:
-      - /var/captura/mysql:/var/lib/mysql
+      - ./container-databases/mysql:/var/lib/mysql
     ports:
       - "3306:3306"
     container_name: mysql
@@ -29,7 +29,7 @@ services:
   cassandra:
     build: ./cassandra/
     volumes:
-      - /var/captura/cassandra:/var/lib/cassandra
+      - ./container-databases/cassandra:/var/lib/cassandra
     ports:
       - "9042:9042"
     container_name: cassandra
