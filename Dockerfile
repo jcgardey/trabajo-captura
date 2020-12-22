@@ -21,7 +21,7 @@ RUN /bin/sh -c "apk add --no-cache bash"
 
 # Create a group and user
 ENV user captura
-RUN addgroup -S ${user} && adduser -S ${user} -G ${user} -h /home/${user} \
+RUN addgroup -S ${user} -g 1000 && adduser -u 1000 -S ${user} -G ${user} -h /home/${user} \
 && chown -R ${user} /home/${user}
 RUN apk update
 RUN apk add sudo
