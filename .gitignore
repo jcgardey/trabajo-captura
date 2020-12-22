@@ -5,3 +5,4 @@ org.gardey.captura/target
 org.gardey.captura/neo4j
 org.gardey.captura/core
 org.gardey.captura/.project
+container-databases
