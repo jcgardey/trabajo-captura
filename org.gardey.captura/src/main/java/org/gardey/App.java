@@ -96,7 +96,12 @@ public class App
     }
 
     public void migrate (DatastoreName source, DatastoreName destination) {
-    	Datastores.getInstance().getRepositoryLocatorForDatastore(destination).getApplicationManagerRepository().save(Datastores.getInstance().getRepositoryLocatorForDatastore(source).getApplicationManagerRepository().getApplicationManagerDetachedCopy());
+		System.setProperty("targetDatastore", source.toString());
+		Logger.getLogger(source.toString()).info("Retrieving complete database");
+		ApplicationManager applicationManager = Datastores.getInstance().getRepositoryLocatorForDatastore(source).getApplicationManagerRepository().getApplicationManagerDetachedCopy();
+		System.setProperty("targetDatastore", destination.toString());
+		Logger.getLogger(destination.toString()).info("Creating database");
+		Datastores.getInstance().getRepositoryLocatorForDatastore(destination).getApplicationManagerRepository().save(applicationManager);
     }
 
     public void replicateData(DatastoreName database) {
